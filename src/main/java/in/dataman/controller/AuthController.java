@@ -1,5 +1,6 @@
 package in.dataman.controller;
 
+import in.dataman.dto.AuthRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -30,7 +31,7 @@ public class AuthController {
     private JwtTokenUtil jwtTokenUtil;
 
     @PostMapping("/login")
-    public String login(@RequestBody AuthRequest authRequest) {
+    public String login(@RequestBody AuthRequestDTO authRequest) {
         try {
             // Authenticate the user
             authenticationManager.authenticate(
@@ -57,10 +58,4 @@ public class AuthController {
     }
 }
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-class AuthRequest {
-    private String username;
-    private String password;
-}
+

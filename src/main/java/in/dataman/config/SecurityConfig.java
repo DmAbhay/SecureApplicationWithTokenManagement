@@ -264,7 +264,10 @@ public class SecurityConfig {
                         		).authenticated()
                         
                         .requestMatchers(HttpMethod.GET,                             
-                        		"/secure/api/get-data", 
+                        		"/secure/api/get-data",
+                                "/secure/api/checkToken",
+                                "/secure/api/current-users",
+                                "/secured",
                                 "/secure/api/fetch-user-details", 
                                 "/secure/api/get-all-users"
                                 ).authenticated()

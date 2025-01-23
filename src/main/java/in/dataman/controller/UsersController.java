@@ -3,6 +3,7 @@ package in.dataman.controller;
 
 import java.security.Principal;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,6 +61,11 @@ public class UsersController {
         String username = null;
         try {
             username = jwtTokenUtil.extractUsername(token.substring(7));  // Remove "Bearer " from the token
+            String name = jwtTokenUtil.extractCustomUsername(token.substring(7));
+            System.out.println("Name :-"+name);
+            System.out.println("UserName :-"+username);
+            System.out.println(jwtTokenUtil.extractClaimsByKey(token.substring(7), "sessionId"));
+
         } catch (Exception e) {
             return "Invalid token: " + e.getMessage();
         }
@@ -104,7 +110,7 @@ public class UsersController {
     }
     
     
-    @PostMapping("/sampl-post")
+    @PostMapping("/sample-post")
     public ResponseEntity<?> samplePostMethod(
             @RequestHeader(value = "Authorization", required = true) String token, 
             @RequestBody JsonNode user, 
