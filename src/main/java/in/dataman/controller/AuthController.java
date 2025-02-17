@@ -1,7 +1,10 @@
 package in.dataman.controller;
 
 import in.dataman.dto.AuthRequestDTO;
+import in.dataman.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,14 +34,14 @@ public class AuthController {
     private JwtTokenUtil jwtTokenUtil;
 
     @PostMapping("/login")
-    public String login(@RequestBody AuthRequestDTO authRequest) {
+    public ResponseEntity<String> login(@RequestBody AuthRequestDTO authRequest) {
         try {
             // Authenticate the user
             authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
             );
         } catch (BadCredentialsException e) {
-            return "Invalid credentials";
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
 
         // Fetch user details
@@ -48,14 +51,31 @@ public class AuthController {
         String token = jwtTokenUtil.generateToken(userDetails.getUsername());
         
         // Optionally, store the token in a cache (e.g., Redis) with the associated username for further validation
-        
-        return token;
+
+        return ResponseEntity.ok(token);
+    }
+
+    @PostMapping("/log")
+    public String test(){
+        return "jai shree krishna";
+    }
+
+
+
+    @PostMapping("/register")
+    public String registerNewUser(@RequestBody UserEntity user) {
+
+        userDetailsService.registerUser(user);
+
+        return "user registered successfully";
+
     }
 
     @GetMapping("/secured")
     public String securedEndpoint( @RequestHeader(value = "Authorization", required = true) String token) {
         return "You have accessed a secured endpoint!";
     }
+
 }
 
 
